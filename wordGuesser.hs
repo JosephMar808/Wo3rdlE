@@ -9,6 +9,10 @@ functions we need:
 * equal (used to recursivly check if the letters are right or wrong) 
 -}
 
+getWords :: FilePath -> IO [String]
+getWords path = do contents <- readFile path
+                   return (lines contents)
+
 run :: IO()
 run = do 
    let secertWord = "5"
