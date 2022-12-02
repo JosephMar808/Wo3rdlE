@@ -1,3 +1,8 @@
+import Data.Char
+import Data.List
+
+--lexer
+--parser
 
 run :: IO()
 run = do 
