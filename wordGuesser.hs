@@ -1,8 +1,13 @@
-import Data.Char
-import Data.List
-
---lexer
---parser
+{-
+data Guesses = Ans String 
+functions we need:
+* bind
+* unit
+* functor
+* applactive
+* monad
+* equal (used to recursivly check if the letters are right or wrong) 
+-}
 
 run :: IO()
 run = do 
@@ -17,3 +22,13 @@ run = do
 main :: IO ()
 main = do 
    run 
+
+
+{-
+Output:
+hello
+hlkeo
+Correct: h,o  
+Wrong place: l,e
+Wrong: k
+-}
