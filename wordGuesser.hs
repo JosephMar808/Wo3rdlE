@@ -8,7 +8,7 @@ functions we need:
 * monad
 * equal (used to recursivly check if the letters are right or wrong) 
 -}
-
+-- i just want to test something
 getWords :: FilePath -> IO [String]
 getWords path = do contents <- readFile path
                    return (lines contents)
