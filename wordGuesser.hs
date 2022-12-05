@@ -1,3 +1,5 @@
+import System.IO
+
 {-
 data Guesses = Ans String 
 functions we need:
@@ -9,19 +11,37 @@ functions we need:
 * equal (used to recursivly check if the letters are right or wrong) 
 -}
 
-getWords :: FilePath -> IO [String]
-getWords path = do contents <- readFile path
-                   return (lines contents)
 
-run :: IO()
-run = do 
-   let secertWord = "5"
-   putStrLn "Enter a guess between 1 and 10: "
-   userGuess <- getLine 
+run :: IO ()
+run = do
+  cmd <- getLine 
+  case words cmd of 
+    ["easy"] -> do
+       superWord <- openFile "easy.txt" ReadMode
+       secertWord <- hGetLine superWord
+       putStrLn "Enter a guess between 1 and 10: "
+       userGuess <- getLine 
+       if userGuess == secertWord
+                     then putStrLn "You win"
+                     else run 
+    ["medium"] -> do
+       superWord <- openFile "medium.txt" ReadMode
+       secertWord <- hGetLine superWord
+       putStrLn "Enter a guess between 1 and 10: "
+       userGuess <- getLine
+       if userGuess == secertWord
+                     then putStrLn "You win"
+                     else run
 
-   if userGuess == secertWord
-   then putStrLn "You win"
-   else run 
+    ["hard"] -> do
+       superWord <- openFile "hard.txt" ReadMode
+       secertWord <- hGetLine superWord
+       putStrLn "Enter a guess between 1 and 10: "
+       userGuess <- getLine
+       if userGuess == secertWord
+                     then putStrLn "You win"
+                     else run
+    ["quit"] -> putStrLn "See ya later"
 
 main :: IO ()
 main = do 
