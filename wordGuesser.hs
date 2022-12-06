@@ -1,5 +1,6 @@
 import System.IO
 import Data.Char
+import System.Random
 {-
 data Guesses = Ans String 
 functions we need:
@@ -8,7 +9,6 @@ functions we need:
 * functor
 * applactive
 * monad
-* equal (used to recursivly check if the letters are right or wrong) 
 -}
 correct :: String -> String -> [String]
 correct [] [] = []
