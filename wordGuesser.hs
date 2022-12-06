@@ -1,5 +1,5 @@
 import System.IO
-
+import Data.Char
 {-
 data Guesses = Ans String 
 functions we need:
@@ -10,25 +10,35 @@ functions we need:
 * monad
 * equal (used to recursivly check if the letters are right or wrong) 
 -}
-correct :: String -> String -> Integer
-correct x y = error "not done yet"
+correct :: String -> String -> Integer -> Integer
+correct [] (y:ys) z = error "please type the amount of words required"
+correct (x:xs) [] z = error "please type the amount of words required"
+correct (x:xs) (y:ys) z = if x == y
+                          then correct xs ys (z + 1)
+                          else correct xs ys z
+correct [] [] z = z
 
-wrongP :: String -> String -> Integer
+wrongP :: String -> String -> Integer -> Integer
 wrongP x y = error "not done yet"
 
-wrong :: String -> String -> Integer
+wrong :: String -> String -> Integer -> [Integer]
 wrong x y = error "not done yet"
 
+-- need to fix this function
 isString :: String -> Maybe a
-isString x = error "not done yet"
+isString (x:xs) = if isAlpha x
+                  then isString xs
+                  else Nothing
 
 howClose :: String -> String -> Either String [Integer]
 howClose x y = case isString x of 
                Nothing -> Left "Please enter strings:"
-               Just b -> Right [correct x y : wrongP x y : wrong x y]
+               Just b -> Right (correct x y 0 : wrongP x y 0 : wrong x y 0)
 
 run :: IO ()
 run = do
+  putStrLn "Please type what difficulty you want!"
+  putStrLn "easy, medium, hard"
   cmd <- getLine 
   case words cmd of 
     ["easy"] -> do
