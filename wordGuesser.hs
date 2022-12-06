@@ -18,21 +18,39 @@ correct (x:xs) (y:ys) = if x == y
                           then [x] : correct xs ys
                           else correct xs ys 
 
-wrongP :: String -> String -> [String]
-wrongP x y = error "not done yet"
+--Works but not for all cases
+-- input: swete 
+-- Secret: sweet
+-- My Output:       [["s","w","e"],["t"],[]]
+-- intended output: [["s","w","e"],["t","e"],[]]
+wrongP :: String -> String -> Int -> [String]
+wrongP [] (y:ys) _ = []
+wrongP (x:xs) (y:ys) z = if isCharEq x (y:ys) z == False
+                         then case isLetterPresant (x:xs) (y:ys) of
+                                   True -> [x] : wrongP xs (y:ys) (z+1)
+                                   False -> wrongP xs (y:ys) (z+1)
+                         else wrongP xs (y:ys) (z+1)
 
-wrong :: String -> String -> [[String]]
+--Helper for wrongP
+isCharEq :: Char -> String -> Int -> Bool
+isCharEq x y z = if [x] == take 1 (drop z y)
+                      then True
+                      else False
+
+wrong :: String -> String -> [String]
 wrong [] (y:ys) = []
 wrong (x:xs) (y:ys) = case isLetterPresant (x:xs) (y:ys) of 
-                           True -> [[x]] : wrong xs (y:ys)
-                           False -> wrong xs (y:ys)
+                           False -> [x] : wrong xs (y:ys)
+                           True -> wrong xs (y:ys)
 
---Helper for wrong
+--Helper for wrong/wrongP
 isLetterPresant :: String -> String -> Bool
-isLetterPresant (x:xs) [] = True
-isLetterPresant (x:xs) (y:ys) = case x /= y of
-                            False -> False
-                            True -> isLetterPresant (x:xs) ys
+isLetterPresant (x:xs) [] = False
+isLetterPresant (x:xs) (y:ys) = case x == y of
+                            True -> True
+                            False -> isLetterPresant (x:xs) ys
+
+
 {-
 -- not being used but needs to be fixed and used in the main maybe?
 isString :: String -> Int -> Maybe [Char]
@@ -50,7 +68,7 @@ bothEq _ _ = False
 howClose :: String -> String -> Int -> Either String [[String]]
 howClose x y z = case bothEq x y of 
                True -> Left "yay"
-               False -> Right (correct x y : wrongP : wrong x y)
+               False -> Right (correct x y : wrongP x y 0 : [wrong x y])
 
 run :: IO ()
 run = do
