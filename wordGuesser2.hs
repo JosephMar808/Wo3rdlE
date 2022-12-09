@@ -3,6 +3,7 @@ import Data.Char
 import System.Random 
 import Control.Monad
 --import Data.List.Split
+
 {-
 data Guesses = Ans String 
 functions we need:
@@ -14,8 +15,8 @@ functions we need:
 -}
 correct :: String -> String -> [String]
 correct [] [] = []
-correct [] (y:ys) = error "please type the amount of words required"
-correct (x:xs) [] = error "please type the amount of words required"
+correct [] (y:ys) = error "please type the amount of words required123"
+correct (x:xs) [] = error "please type the amount of words required098"
 correct (x:xs) (y:ys) = if x == y
                           then [x] : correct xs ys
                           else correct xs ys 
@@ -74,18 +75,18 @@ howClose x y z = case bothEq x y of
 
 guessNum :: String -> String -> Int -> Int -> IO ()
 guessNum x y z n = case howClose x y z of 
-                Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> return ()
+                Left t -> putStrLn "Congrats! you guessed the word!" >> return ()
                 Right e -> do
                         putStrLn "[Correct, Placement, Wrong]"
                         putStrLn (show e)
                         putStr (show (n - 1))
-                        putStr "  more guesses! Please try again:"
+                        putStrLn " more guesses! Please try again:"
                         userGuess <- getLine
                         if (n-1) > 0 then guessNum userGuess y z (n-1) else putStrLn (show y) >> return ()
 
+
 run :: IO ()
 run = do
-
   putStrLn "Please type what difficulty you want!"
   putStrLn "easy, medium, hard"
   cmd <- getLine 
@@ -105,7 +106,7 @@ run = do
        let w_list = lines secertWord
        random_in <- randomRIO (0, length w_list - 1)
        let numword = w_list !! random_in
-       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
+       putStrLn "The word is 7 letters long, go ahead and try to guess the word: "
        userGuess <- getLine 
        guessNum userGuess numword 7 7 
     ["hard"] -> do
@@ -114,7 +115,7 @@ run = do
        let w_list = lines secertWord
        random_in <- randomRIO (0, length w_list - 1)
        let numword = w_list !! random_in
-       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
+       putStrLn "The word is 9 letters long, go ahead and try to guess the word: "
        userGuess <- getLine
        guessNum userGuess numword 9 9
     ["quit"] -> return ()
