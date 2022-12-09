@@ -1,15 +1,9 @@
 import System.IO
 import Data.Char
-<<<<<<< HEAD
---import System.Random (mkStdGen)
---import Data.Random
---import Control.Monad
---import Control.Monad.Random
-=======
 import System.Random 
 import Control.Monad
 --import Data.List.Split
->>>>>>> a004609589890f5abe1b226411e022658873aead
+
 {-
 data Guesses = Ans String 
 functions we need:
@@ -83,23 +77,13 @@ guessNum :: String -> String -> Int -> Int -> IO ()
 guessNum x y z n = case howClose x y z of 
                 Left t -> putStrLn "Congrats! you guessed the word!" >> return ()
                 Right e -> do
-<<<<<<< HEAD
-                           putStrLn "[Correct, Placement, Wrong]"
-                           putStrLn (show e)
-                           putStr (show (n - 1))
-                           putStrLn " more guesses! Please try again:"
-                           userGuess <- getLine
-                           if n == 1 
-                           then guessNum userGuess y z (n-1) 
-                           else putStrLn "Sorry, your out of guesses" >> return ()
-=======
                         putStrLn "[Correct, Placement, Wrong]"
                         putStrLn (show e)
                         putStr (show (n - 1))
                         putStr "  more guesses! Please try again:"
                         userGuess <- getLine
                         if n > 2 then guessNum userGuess y z (n-1) else putStrLn (show y) >> return ()
->>>>>>> a004609589890f5abe1b226411e022658873aead
+
 
 run :: IO ()
 run = do
@@ -109,18 +93,6 @@ run = do
   case words cmd of 
     ["easy"] -> do
        superWord <- openFile "easy.txt" ReadMode
-<<<<<<< HEAD
-       secretWord <- hGetLine superWord
-       --let words = lines superWord
-       --mkStdGen 3 words
-       --putStrLn word 
-    --   let word = sample $ choice words
-  --     putStrLn =<< word
-       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
-       userGuess <- getLine 
-       guessNum userGuess secretWord 5 5
-
-=======
        secertWord <- hGetContents superWord
        let w_list = lines secertWord
        random_in <- randomRIO (0, length w_list - 1)
@@ -128,7 +100,6 @@ run = do
        putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
        userGuess <- getLine
        guessNum userGuess numword 5 5
->>>>>>> a004609589890f5abe1b226411e022658873aead
     ["medium"] -> do
        superWord <- openFile "medium.txt" ReadMode
        secertWord <- hGetContents superWord
