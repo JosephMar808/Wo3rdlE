@@ -1,6 +1,9 @@
 import System.IO
 import Data.Char
---import System.Random
+import System.Random (mkStdGen)
+--import Data.Random
+import Control.Monad
+--import Control.Monad.Random
 {-
 data Guesses = Ans String 
 functions we need:
@@ -10,10 +13,7 @@ functions we need:
 * applactive
 * monad
 -}
-
-data Guess a = Word a |Correct String | Num Integer 
-
-correct :: a -> a -> [Maybe a -> [Maybe b]] 
+correct :: String -> String -> [String]
 correct [] [] = []
 correct [] (y:ys) = error "please type the amount of words required"
 correct (x:xs) [] = error "please type the amount of words required"
@@ -73,68 +73,36 @@ howClose x y z = case bothEq x y of
                True -> Left "yay"
                False -> Right (correct x y : wrongP x y 0 : [wrong x y])
 
-unitGuess :: a -> Guess a
-unitGuess = Word
-
-bindGuess :: (a -> Guess b) -> Guess a -> Guess b
-bindGuess f (Word x) = f x
-bindGuess f (Correct v) = Correct v
-bindGuess f (Num e) = Num e
-
-instance Functor Guess where
-  fmap f = bindGuess (unitGuess . f)
-
-instance Applicative Guess where
-  pure = unitGuess
-  f <*> t = bindGuess (<$> t) f
-
-instance Monad Guess where
-  return = unitGuess
-  t >>= f = bindGuess f t
-
+guessNum :: String -> String -> Int -> Int -> IO ()
+guessNum x y z n = case howClose x y z of 
+                Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> return ()
+                Right e -> do
+                        putStrLn "[Correct, Placement, Wrong]"
+                        putStrLn (show e)
+                        putStr (show (n - 1))
+                        putStr "  more guesses! Please try again:"
+                        userGuess <- getLine
+                        if n > 2 then guessNum userGuess y z (n-1) else putStrLn "Oh no!" >> return ()
 
 run :: IO ()
 run = do
+
   putStrLn "Please type what difficulty you want!"
   putStrLn "easy, medium, hard"
   cmd <- getLine 
   case words cmd of 
     ["easy"] -> do
-       superWord <- openFile "easy.txt" ReadMode
-       secertWord <- hGetLine superWord
+       superWord <- readFile "easy.txt" 
+       --secertWord <- hGetLine superWord
+       let words = lines superWord
+       mkStdGen 3 words
+       putStrLn word 
+    --   let word = sample $ choice words
+  --     putStrLn =<< word
        putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
        userGuess <- getLine 
-       case howClose userGuess secertWord 5 of
-                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                     Right e -> do 
-                               putStrLn "[Correct, Placement, Wrong]"
-                               putStrLn (show e)
-                               putStrLn "You have 4 more guesses! Please try again:"
-                               userGuess <- getLine
-                               case howClose userGuess secertWord 5 of
-                                             Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                             Right e -> do 
-                                                       putStrLn "[Correct, Placement, Wrong]"
-                                                       putStrLn (show e)
-                                                       putStrLn "You have 3 more guesses! Please try again:"
-                                                       userGuess <- getLine
-                                                       case howClose userGuess secertWord 5 of
-                                                                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                     Right e -> do 
-                                                                               putStrLn "[Correct, Placement, Wrong]"
-                                                                               putStrLn (show e)
-                                                                               putStrLn "You have 2 more guesses! Please try again:"
-                                                                               userGuess <- getLine
-                                                                               case howClose userGuess secertWord 5 of
-                                                                                             Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                                             Right e -> do 
-                                                                                                       putStrLn "[Correct, Placement, Wrong]"
-                                                                                                       putStrLn (show e)
-                                                                                                       putStrLn "You have 1 more guess! Please try again:"
-                                                                                                       userGuess <- getLine
-                                                                                                       case howClose userGuess secertWord 5 of
-                                                                                                                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                                                                     _ -> putStrLn "Sorry your out of guesses. if you would like to play again, pick your difficulty!" >> run  
+       guessNum userGuess word 5 5
+
     ["medium"] -> do
        superWord <- openFile "medium.txt" ReadMode
        secertWord <- hGetLine superWord
@@ -208,6 +176,8 @@ run = do
                                                                                                                      Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
                                                                                                                      _ -> putStrLn "Sorry your out of guesses. if you would like to play again, pick your difficulty!" >> run
     ["quit"] -> return ()
+
+
 
 main :: IO ()
 main = do 
