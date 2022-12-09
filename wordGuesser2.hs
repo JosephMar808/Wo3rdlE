@@ -80,7 +80,7 @@ guessNum x y z n = case howClose x y z of
                         putStrLn "[Correct, Placement, Wrong]"
                         putStrLn (show e)
                         putStr (show (n - 1))
-                        putStr "  more guesses! Please try again:"
+                        putStrLn " more guesses! Please try again:"
                         userGuess <- getLine
                         if n > 2 then guessNum userGuess y z (n-1) else putStrLn (show y) >> return ()
 
@@ -106,7 +106,7 @@ run = do
        let w_list = lines secertWord
        random_in <- randomRIO (0, length w_list - 1)
        let numword = w_list !! random_in
-       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
+       putStrLn "The word is 7 letters long, go ahead and try to guess the word: "
        userGuess <- getLine 
        guessNum userGuess numword 7 7 
     ["hard"] -> do
@@ -115,7 +115,7 @@ run = do
        let w_list = lines secertWord
        random_in <- randomRIO (0, length w_list - 1)
        let numword = w_list !! random_in
-       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
+       putStrLn "The word is 9 letters long, go ahead and try to guess the word: "
        userGuess <- getLine
        guessNum userGuess numword 9 9
     ["quit"] -> return ()
