@@ -13,7 +13,7 @@ functions we need:
 
 data Guess a = Word a |Correct String | Num Integer 
 
-correct :: a -> a -> [Maybe a -> [Maybe b]] 
+correct :: String -> String -> [String] 
 correct [] [] = []
 correct [] (y:ys) = error "please type the amount of words required"
 correct (x:xs) [] = error "please type the amount of words required"
@@ -72,7 +72,7 @@ howClose :: String -> String -> Int -> Either String [[String]]
 howClose x y z = case bothEq x y of 
                True -> Left "yay"
                False -> Right (correct x y : wrongP x y 0 : [wrong x y])
-
+{-
 unitGuess :: a -> Guess a
 unitGuess = Word
 
@@ -91,7 +91,7 @@ instance Applicative Guess where
 instance Monad Guess where
   return = unitGuess
   t >>= f = bindGuess f t
-
+-}
 
 run :: IO ()
 run = do

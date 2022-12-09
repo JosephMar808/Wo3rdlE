@@ -1,8 +1,8 @@
 import System.IO
 import Data.Char
-import System.Random (mkStdGen)
+--import System.Random (mkStdGen)
 --import Data.Random
-import Control.Monad
+--import Control.Monad
 --import Control.Monad.Random
 {-
 data Guesses = Ans String 
@@ -15,8 +15,8 @@ functions we need:
 -}
 correct :: String -> String -> [String]
 correct [] [] = []
-correct [] (y:ys) = error "please type the amount of words required"
-correct (x:xs) [] = error "please type the amount of words required"
+correct [] (y:ys) = error "please type the amount of words required123"
+correct (x:xs) [] = error "please type the amount of words required098"
 correct (x:xs) (y:ys) = if x == y
                           then [x] : correct xs ys
                           else correct xs ys 
@@ -75,33 +75,34 @@ howClose x y z = case bothEq x y of
 
 guessNum :: String -> String -> Int -> Int -> IO ()
 guessNum x y z n = case howClose x y z of 
-                Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> return ()
+                Left t -> putStrLn "Congrats! you guessed the word!" >> return ()
                 Right e -> do
-                        putStrLn "[Correct, Placement, Wrong]"
-                        putStrLn (show e)
-                        putStr (show (n - 1))
-                        putStr "  more guesses! Please try again:"
-                        userGuess <- getLine
-                        if n > 2 then guessNum userGuess y z (n-1) else putStrLn "Oh no!" >> return ()
+                           putStrLn "[Correct, Placement, Wrong]"
+                           putStrLn (show e)
+                           putStr (show (n - 1))
+                           putStrLn " more guesses! Please try again:"
+                           userGuess <- getLine
+                           if n == 1 
+                           then guessNum userGuess y z (n-1) 
+                           else putStrLn "Sorry, your out of guesses" >> return ()
 
 run :: IO ()
 run = do
-
   putStrLn "Please type what difficulty you want!"
   putStrLn "easy, medium, hard"
   cmd <- getLine 
   case words cmd of 
     ["easy"] -> do
-       superWord <- readFile "easy.txt" 
-       --secertWord <- hGetLine superWord
-       let words = lines superWord
-       mkStdGen 3 words
-       putStrLn word 
+       superWord <- openFile "easy.txt" ReadMode
+       secretWord <- hGetLine superWord
+       --let words = lines superWord
+       --mkStdGen 3 words
+       --putStrLn word 
     --   let word = sample $ choice words
   --     putStrLn =<< word
        putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
        userGuess <- getLine 
-       guessNum userGuess word 5 5
+       guessNum userGuess secretWord 5 5
 
     ["medium"] -> do
        superWord <- openFile "medium.txt" ReadMode
