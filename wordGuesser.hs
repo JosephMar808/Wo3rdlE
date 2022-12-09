@@ -1,6 +1,7 @@
 import System.IO
 import Data.Char
---import System.Random
+import System.Random
+
 {-
 data Guesses = Ans String 
 functions we need:

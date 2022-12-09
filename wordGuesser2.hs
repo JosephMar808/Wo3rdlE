@@ -1,9 +1,8 @@
 import System.IO
 import Data.Char
-import System.Random (mkStdGen)
---import Data.Random
+import System.Random 
 import Control.Monad
---import Control.Monad.Random
+--import Data.List.Split
 {-
 data Guesses = Ans String 
 functions we need:
@@ -92,17 +91,14 @@ run = do
   cmd <- getLine 
   case words cmd of 
     ["easy"] -> do
-       superWord <- readFile "easy.txt" 
-       --secertWord <- hGetLine superWord
-       let words = lines superWord
-       mkStdGen 3 words
-       putStrLn word 
-    --   let word = sample $ choice words
-  --     putStrLn =<< word
-       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
-       userGuess <- getLine 
-       guessNum userGuess word 5 5
-
+       superWord <- openFile "easy.txt" ReadMode
+       secertWord <- hGetContents superWord
+       let w_list = lines secertWord
+       random_in <- randomRIO (0, length w_list - 1)
+       let numword = w_list !! random_in
+       putStrLn "The word is 7 letters long, go ahead and try to guess the word: "
+       userGuess <- getLine
+       guessNum userGuess numword 5 5  
     ["medium"] -> do
        superWord <- openFile "medium.txt" ReadMode
        secertWord <- hGetLine superWord
