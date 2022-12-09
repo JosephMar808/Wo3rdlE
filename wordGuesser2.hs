@@ -3,6 +3,7 @@ import Data.Char
 import System.Random 
 import Control.Monad
 --import Data.List.Split
+
 {-
 data Guesses = Ans String 
 functions we need:
@@ -82,6 +83,7 @@ guessNum x y z n = case howClose x y z of
                         putStr "  more guesses! Please try again:"
                         userGuess <- getLine
                         if n > 2 then guessNum userGuess y z (n-1) else putStrLn (show y) >> return ()
+
 
 run :: IO ()
 run = do
