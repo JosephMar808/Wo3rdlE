@@ -15,8 +15,6 @@ functions we need:
 -}
 correct :: String -> String -> [String]
 correct [] [] = []
-correct [] (y:ys) = error "please type the amount of words required123"
-correct (x:xs) [] = error "please type the amount of words required098"
 correct (x:xs) (y:ys) = if x == y
                           then [x] : correct xs ys
                           else correct xs ys 
@@ -82,24 +80,28 @@ guessNum x y z n = case howClose x y z of
                         putStr (show (n - 1))
                         putStrLn " more guesses! Please try again:"
                         userGuess <- getLine
-                        if (n-1) > 0 then guessNum userGuess y z (n-1) else putStrLn (show y) >> return ()
+                        if n > 2
+                        then guessNum userGuess y z (n-1) 
+                        else if bothEq userGuess y 
+                             then putStrLn "Congrats! you guessed the word!" >> return ()
+                             else putStrLn (show y) >> return ()
 
 
 run :: IO ()
 run = do
-  putStrLn "Please type what difficulty you want!"
+  putStrLn "Please type what difficulty you want!, or type quit to exit the game"
   putStrLn "easy, medium, hard"
   cmd <- getLine 
   case words cmd of 
     ["easy"] -> do
-       superWord <- openFile "deeznuts.txt" ReadMode
+       superWord <- openFile "easy.txt" ReadMode
        secertWord <- hGetContents superWord
        let w_list = lines secertWord
        random_in <- randomRIO (0, length w_list - 1)
        let numword = w_list !! random_in
        putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
        userGuess <- getLine
-       guessNum userGuess numword 5 4
+       guessNum userGuess numword 5 5
     ["medium"] -> do
        superWord <- openFile "medium.txt" ReadMode
        secertWord <- hGetContents superWord
