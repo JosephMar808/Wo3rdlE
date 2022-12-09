@@ -19,11 +19,6 @@ correct (x:xs) (y:ys) = if x == y
                           then [x] : correct xs ys
                           else correct xs ys 
 
---Works but not for all cases
--- input: swete 
--- Secret: sweet
--- My Output:       [["s","w","e"],["t"],[]]
--- intended output: [["s","w","e"],["t","e"],[]]
 wrongP :: String -> String -> Int -> [String]
 wrongP [] (y:ys) _ = []
 wrongP (x:xs) (y:ys) z = if isCharEq x (y:ys) z == False
@@ -51,20 +46,10 @@ isLetterPresant (x:xs) (y:ys) = case x == y of
                             True -> True
                             False -> isLetterPresant (x:xs) ys
 
-
-{-
--- not being used but needs to be fixed and used in the main maybe?
-isString :: String -> Int -> Maybe [Char]
-isString x z = let (y,ys) = span isAlpha x
-               in if length y == z 
-                  then Just y
-                  else Nothing
--}
 -- Helper for howClose
 bothEq :: String -> String -> Bool
 bothEq [] [] = True
 bothEq (x:xs) (y:ys) = x == y && bothEq xs ys
-bothEq _ _ = False
 
 howClose :: String -> String -> Int -> Either String [[String]]
 howClose x y z = case bothEq x y of 
@@ -85,7 +70,6 @@ guessNum x y z n = case howClose x y z of
                         else if bothEq userGuess y 
                              then putStrLn "Congrats! you guessed the word!" >> return ()
                              else putStrLn (show y) >> return ()
-
 
 run :: IO ()
 run = do
