@@ -81,7 +81,7 @@ guessNum x y z n = case howClose x y z of
                         putStr (show (n - 1))
                         putStr "  more guesses! Please try again:"
                         userGuess <- getLine
-                        if n > 2 then guessNum userGuess y z (n-1) else putStrLn "Oh no!" >> return ()
+                        if n > 2 then guessNum userGuess y z (n-1) else putStrLn (show y) >> return ()
 
 run :: IO ()
 run = do
@@ -96,81 +96,27 @@ run = do
        let w_list = lines secertWord
        random_in <- randomRIO (0, length w_list - 1)
        let numword = w_list !! random_in
-       putStrLn "The word is 7 letters long, go ahead and try to guess the word: "
+       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
        userGuess <- getLine
-       guessNum userGuess numword 5 5  
+       guessNum userGuess numword 5 5
     ["medium"] -> do
        superWord <- openFile "medium.txt" ReadMode
-       secertWord <- hGetLine superWord
-       putStrLn "The word is 7 letters long, go ahead and try to guess the word: "
+       secertWord <- hGetContents superWord
+       let w_list = lines secertWord
+       random_in <- randomRIO (0, length w_list - 1)
+       let numword = w_list !! random_in
+       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
        userGuess <- getLine 
-       case howClose userGuess secertWord 7 of
-                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                     Right e -> do 
-                               putStrLn "[Correct, Placement, Wrong]"
-                               putStrLn (show e)
-                               putStrLn "You have 4 more guesses! Please try again:"
-                               userGuess <- getLine
-                               case howClose userGuess secertWord 7 of
-                                             Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                             Right e -> do 
-                                                       putStrLn "[Correct, Placement, Wrong]"
-                                                       putStrLn (show e)
-                                                       putStrLn "You have 3 more guesses! Please try again:"
-                                                       userGuess <- getLine
-                                                       case howClose userGuess secertWord 7 of
-                                                                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                     Right e -> do 
-                                                                               putStrLn "[Correct, Placement, Wrong]"
-                                                                               putStrLn (show e)
-                                                                               putStrLn "You have 2 more guesses! Please try again:"
-                                                                               userGuess <- getLine
-                                                                               case howClose userGuess secertWord 7 of
-                                                                                             Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                                             Right e -> do 
-                                                                                                       putStrLn "[Correct, Placement, Wrong]"
-                                                                                                       putStrLn (show e)
-                                                                                                       putStrLn "You have 1 more guess! Please try again:"
-                                                                                                       userGuess <- getLine
-                                                                                                       case howClose userGuess secertWord 7 of
-                                                                                                                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                                                                     _ -> putStrLn "Sorry your out of guesses. if you would like to play again, pick your difficulty!" >> run                                                                                                                      
+       guessNum userGuess numword 7 7 
     ["hard"] -> do
        superWord <- openFile "hard.txt" ReadMode
-       secertWord <- hGetLine superWord
-       putStrLn "The word is 9 letters long, go ahead and try to guess the word: "
-       userGuess <- getLine 
-       case howClose userGuess secertWord 9 of
-                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                     Right e -> do 
-                               putStrLn "[Correct, Placement, Wrong]"
-                               putStrLn (show e)
-                               putStrLn "You have 4 more guesses! Please try again:"
-                               userGuess <- getLine
-                               case howClose userGuess secertWord 9 of
-                                             Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                             Right e -> do 
-                                                       putStrLn "[Correct, Placement, Wrong]"
-                                                       putStrLn (show e)
-                                                       putStrLn "You have 3 more guesses! Please try again:"
-                                                       userGuess <- getLine
-                                                       case howClose userGuess secertWord 9 of
-                                                                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                     Right e -> do 
-                                                                               putStrLn "[Correct, Placement, Wrong]"
-                                                                               putStrLn (show e)
-                                                                               putStrLn "You have 2 more guesses! Please try again:"
-                                                                               userGuess <- getLine
-                                                                               case howClose userGuess secertWord 9 of
-                                                                                             Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                                             Right e -> do 
-                                                                                                       putStrLn "[Correct, Placement, Wrong]"
-                                                                                                       putStrLn (show e)
-                                                                                                       putStrLn "You have 1 more guess! Please try again:"
-                                                                                                       userGuess <- getLine
-                                                                                                       case howClose userGuess secertWord 9 of
-                                                                                                                     Left t -> putStrLn "Congrats! you guessed the word!, if you would like to play again pick your difficulty!" >> run
-                                                                                                                     _ -> putStrLn "Sorry your out of guesses. if you would like to play again, pick your difficulty!" >> run
+       secertWord <- hGetContents superWord
+       let w_list = lines secertWord
+       random_in <- randomRIO (0, length w_list - 1)
+       let numword = w_list !! random_in
+       putStrLn "The word is 5 letters long, go ahead and try to guess the word: "
+       userGuess <- getLine
+       guessNum userGuess numword 9 9
     ["quit"] -> return ()
 
 
