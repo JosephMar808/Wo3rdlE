@@ -1,18 +1,8 @@
 import System.IO
 import Data.Char
 import System.Random 
-import Control.Monad
---import Data.List.Split
 
-{-
-data Guesses = Ans String 
-functions we need:
-* bind
-* unit
-* functor
-* applactive
-* monad
--}
+
 correct :: String -> String -> [String]
 correct [] [] = []
 correct (x:xs) (y:ys) = if x == y
